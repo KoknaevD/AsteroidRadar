@@ -1,9 +1,9 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import android.util.Log
+import androidx.lifecycle.*
+import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.repository.AsteroidsRepository
 import java.lang.IllegalArgumentException
 
@@ -18,6 +18,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val asteroidsRepository = AsteroidsRepository(database)
 
     val asteroids = asteroidsRepository.asteroids
+
+    private val _navigateToSelectedAsteroid = MutableLiveData<Asteroid>()
+    val navigateToSelectedAsteroid: LiveData<Asteroid>
+        get() = _navigateToSelectedAsteroid
+
+    fun displayAsteroidDetails(asteroid: Asteroid) {
+        Log.i("test123", "displayAsteroidDetails $asteroid")
+        _navigateToSelectedAsteroid.value = asteroid
+    }
+
+    fun displayAsteroidDetailsComplete() {
+        Log.i("test123", " displayAsteroidDetailsComplete")
+        _navigateToSelectedAsteroid.value = null
+    }
+
+
 
 
     class Factory(private val app:Application): ViewModelProvider.Factory{

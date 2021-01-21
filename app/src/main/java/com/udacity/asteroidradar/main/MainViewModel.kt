@@ -5,19 +5,30 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.repository.AsteroidsRepository
+import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-
     private val database = getDatabase(application)
+    private val asteroidsRepository = AsteroidsRepository(database)
+
+
+    init {
+        viewModelScope.launch {
+            asteroidsRepository.loadImageOfTheDay()
+        }
+    }
+
 
     private fun getDatabase(application: Application): Any {
         return 0
     }
 
-    private val asteroidsRepository = AsteroidsRepository(database)
 
     val asteroids = asteroidsRepository.asteroids
+
+    val pictureOfDay = asteroidsRepository.pictureOfDay
+
 
     private val _navigateToSelectedAsteroid = MutableLiveData<Asteroid>()
     val navigateToSelectedAsteroid: LiveData<Asteroid>
@@ -34,9 +45,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-
-
-    class Factory(private val app:Application): ViewModelProvider.Factory{
+    class Factory(private val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")

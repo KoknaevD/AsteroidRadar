@@ -16,6 +16,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     init {
         viewModelScope.launch {
             asteroidsRepository.loadImageOfTheDay()
+            asteroidsRepository.loadAsteroids()
         }
     }
 
@@ -24,9 +25,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return 0
     }
 
-
     val asteroids = asteroidsRepository.asteroids
-
     val pictureOfDay = asteroidsRepository.pictureOfDay
 
 
@@ -35,12 +34,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         get() = _navigateToSelectedAsteroid
 
     fun displayAsteroidDetails(asteroid: Asteroid) {
-        Log.i("test123", "displayAsteroidDetails $asteroid")
         _navigateToSelectedAsteroid.value = asteroid
     }
 
     fun displayAsteroidDetailsComplete() {
-        Log.i("test123", " displayAsteroidDetailsComplete")
         _navigateToSelectedAsteroid.value = null
     }
 

@@ -1,13 +1,17 @@
 package com.udacity.asteroidradar.database
 
 import android.content.Context
-import androidx.room.Dao
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.lifecycle.LiveData
+import androidx.room.*
 
 @Dao
 interface AsteroidDao {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(vararg asteroids: DataBaseAsteroid)
+
+    @Query("select * from databaseasteroid")
+    fun getAsteroids(): LiveData<List<DataBaseAsteroid>>
 
 }
 

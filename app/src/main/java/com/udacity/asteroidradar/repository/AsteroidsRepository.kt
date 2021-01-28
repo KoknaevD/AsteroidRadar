@@ -1,7 +1,9 @@
 package com.udacity.asteroidradar.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -11,8 +13,12 @@ import com.udacity.asteroidradar.PictureOfDay
 import com.udacity.asteroidradar.api.getCurrentDay
 import com.udacity.asteroidradar.api.getNextWeekDay
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
+import com.udacity.asteroidradar.database.AsteroidsDatabase
+import com.udacity.asteroidradar.database.DataBaseAsteroid
+import com.udacity.asteroidradar.database.asDomainModel
 import com.udacity.asteroidradar.network.Network
-import kotlinx.coroutines.Deferred
+import com.udacity.asteroidradar.network.asDatabaseModel
+import kotlinx.coroutines.*
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,9 +30,12 @@ import retrofit2.http.GET
 import java.lang.Exception
 
 
-class AsteroidsRepository(database: Any) {
+class AsteroidsRepository(private val database: AsteroidsDatabase) {
 
-    val asteroids: MutableLiveData<List<Asteroid>> = MutableLiveData()
+    val asteroids: LiveData<List<Asteroid>> =
+        Transformations.map(database.asteroidDao.getAsteroids()) {
+            it.asDomainModel()
+        }
 
     fun loadAsteroids() {
         val currentDay = getCurrentDay()
@@ -41,7 +50,12 @@ class AsteroidsRepository(database: Any) {
                 try {
                     val result = response.body()
                     result?.let {
-                        asteroids.value = parseAsteroidsJsonResult(JSONObject(it))
+                        val asteroidsList = parseAsteroidsJsonResult(JSONObject(it))
+
+                        GlobalScope.launch {
+                            database.asteroidDao.insertAll(*asteroidsList.asDatabaseModel())
+                        }
+                        //
                     }
                 } catch (e: Exception) {
                     //TODO error msg

@@ -4,8 +4,13 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.database.DataBaseAsteroid
+import com.udacity.asteroidradar.database.getDatabase
+import com.udacity.asteroidradar.network.asDatabaseModel
 import com.udacity.asteroidradar.repository.AsteroidsRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.IllegalArgumentException
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -20,10 +25,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-
-    private fun getDatabase(application: Application): Any {
-        return 0
-    }
 
     val asteroids = asteroidsRepository.asteroids
     val pictureOfDay = asteroidsRepository.pictureOfDay

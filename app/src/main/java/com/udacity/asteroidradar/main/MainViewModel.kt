@@ -1,16 +1,10 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
-import com.udacity.asteroidradar.Asteroid
-import com.udacity.asteroidradar.database.DataBaseAsteroid
 import com.udacity.asteroidradar.database.getDatabase
-import com.udacity.asteroidradar.network.asDatabaseModel
 import com.udacity.asteroidradar.repository.AsteroidsRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.lang.IllegalArgumentException
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {

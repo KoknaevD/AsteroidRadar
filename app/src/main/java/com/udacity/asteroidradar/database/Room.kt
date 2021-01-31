@@ -24,7 +24,7 @@ interface AsteroidDao {
     @Query("select * from databaseasteroid where closeApproachDate = :currentDay order by closeApproachDate")
     fun getTodayAsteroids(currentDay: String): LiveData<List<DataBaseAsteroid>>
 
-    @Query("select * from databaseasteroid where closeApproachDate >= :currentDay and closeApproachDate <= :nextWeekDay order by closeApproachDate")
+    @Query("select * from databaseasteroid where closeApproachDate >= :currentDay and closeApproachDate < :nextWeekDay order by closeApproachDate")
     fun getWeekAsteroids(currentDay: String, nextWeekDay: String): LiveData<List<DataBaseAsteroid>>
 
 
@@ -34,8 +34,8 @@ interface AsteroidDao {
 
 }
 
-enum class AsteroidApiFilter(val value: Int) {
-    SHOW_WEEK(2), SHOW_TODAY(1), SHOW_ALL(0)
+enum class AsteroidApiFilter() {
+    SHOW_WEEK, SHOW_TODAY, SHOW_ALL
 }
 
 @Database(entities = [DataBaseAsteroid::class], version = 1)

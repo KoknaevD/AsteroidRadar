@@ -25,11 +25,12 @@ import java.lang.Exception
 class AsteroidsRepository(private val database: AsteroidsDatabase) {
     private val currentDay = getCurrentDay()
     private val nextWeekDay = getNextWeekDay()
-    var filter = AsteroidApiFilter.SHOW_TODAY
-    val asteroids: LiveData<List<Asteroid>> =
-        Transformations.map(database.asteroidDao.getAsteroids(currentDay)) {
-            it.asDomainModel()
-        }
+
+    fun getAsteroids() = database.asteroidDao.getAsteroids(currentDay)
+
+    fun getTodayAsteroids() = database.asteroidDao.getTodayAsteroids(currentDay)
+
+    fun getWeekAsteroids() = database.asteroidDao.getWeekAsteroids(currentDay, nextWeekDay)
 
 
     fun loadAsteroids() {

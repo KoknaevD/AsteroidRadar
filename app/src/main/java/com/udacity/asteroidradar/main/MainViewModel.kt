@@ -2,6 +2,7 @@ package com.udacity.asteroidradar.main
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.udacity.asteroidradar.database.AsteroidApiFilter
 import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.repository.AsteroidsRepository
 import kotlinx.coroutines.launch
@@ -11,14 +12,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val database = getDatabase(application)
     private val asteroidsRepository = AsteroidsRepository(database)
 
-
     init {
         viewModelScope.launch {
             asteroidsRepository.loadImageOfTheDay()
             asteroidsRepository.loadAsteroids()
         }
     }
-
 
     val asteroids = asteroidsRepository.asteroids
     val pictureOfDay = asteroidsRepository.pictureOfDay
@@ -46,6 +45,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             throw IllegalArgumentException("unable to construct MainViewModel")
         }
     }
+
+    fun updateFilter(filter: AsteroidApiFilter) {
+        asteroidsRepository.filter = filter
+    }
+
 }
 
 

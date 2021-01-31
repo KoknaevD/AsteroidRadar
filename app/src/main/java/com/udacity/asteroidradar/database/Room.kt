@@ -10,13 +10,32 @@ interface AsteroidDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg asteroids: DataBaseAsteroid)
 
+//    @Query(
+//        "select * from databaseasteroid  where  case  when :filter = 0  then closeApproachDate >= :currentDay  when :filter = 1 then closeApproachDate = :currentDay else closeApproachDate >= :currentDay and closeApproachDate <= :nextWeekDay end order by closeApproachDate")
+//    fun getFilterAsteroids(
+//        currentDay: String,
+//        nextWeekDay: String,
+//        filter: Int
+//    ): LiveData<List<DataBaseAsteroid>>
+
     @Query("select * from databaseasteroid where closeApproachDate >= :currentDay order by closeApproachDate")
     fun getAsteroids(currentDay: String): LiveData<List<DataBaseAsteroid>>
+
+    @Query("select * from databaseasteroid where closeApproachDate = :currentDay order by closeApproachDate")
+    fun getTodayAsteroids(currentDay: String): LiveData<List<DataBaseAsteroid>>
+
+    @Query("select * from databaseasteroid where closeApproachDate >= :currentDay and closeApproachDate <= :nextWeekDay order by closeApproachDate")
+    fun getWeekAsteroids(currentDay: String, nextWeekDay: String): LiveData<List<DataBaseAsteroid>>
+
 
     @Query("delete from databaseasteroid where closeApproachDate < :currentDay")
     fun deleteAsteroids(currentDay: String): Int
 
 
+}
+
+enum class AsteroidApiFilter(val value: Int) {
+    SHOW_WEEK(2), SHOW_TODAY(1), SHOW_ALL(0)
 }
 
 @Database(entities = [DataBaseAsteroid::class], version = 1)

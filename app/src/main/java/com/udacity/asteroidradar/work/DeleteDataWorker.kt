@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.work
 
 import android.content.Context
+import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.udacity.asteroidradar.database.getDatabase
@@ -21,6 +22,7 @@ class DeleteDataWorker(appContext: Context, params: WorkerParameters) :
             repository.deleteAsteroids()
             Result.success()
         } catch (exception: Exception) {
+            Log.i("test123", "DeleteDataWorker ${exception}")
             Result.retry()
         }
     }

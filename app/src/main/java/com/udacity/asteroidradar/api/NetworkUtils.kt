@@ -64,7 +64,8 @@ fun getCurrentDay(): String {
 
     return dateFormat.format(currentTime)
 }
- fun getNextWeekDay(): String {
+
+fun getNextWeekDay(): String {
     val calendar = Calendar.getInstance()
     calendar.add(Calendar.DAY_OF_YEAR, 7)
     val currentTime = calendar.time

@@ -36,7 +36,6 @@ fun bindImageOfTheDay(imageView: ImageView, pictureOfDay: PictureOfDay?) {
 }
 
 
-
 @BindingAdapter("asteroidStatusImage")
 fun bindDetailsStatusImage(imageView: ImageView, isHazardous: Boolean) {
     val context = imageView.context

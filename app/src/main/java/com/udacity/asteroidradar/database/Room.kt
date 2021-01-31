@@ -27,16 +27,11 @@ interface AsteroidDao {
     @Query("select * from databaseasteroid where closeApproachDate >= :currentDay and closeApproachDate < :nextWeekDay order by closeApproachDate")
     fun getWeekAsteroids(currentDay: String, nextWeekDay: String): LiveData<List<DataBaseAsteroid>>
 
-
     @Query("delete from databaseasteroid where closeApproachDate < :currentDay")
     fun deleteAsteroids(currentDay: String): Int
 
-
 }
 
-enum class AsteroidApiFilter() {
-    SHOW_WEEK, SHOW_TODAY, SHOW_ALL
-}
 
 @Database(entities = [DataBaseAsteroid::class], version = 1)
 abstract class AsteroidsDatabase : RoomDatabase() {

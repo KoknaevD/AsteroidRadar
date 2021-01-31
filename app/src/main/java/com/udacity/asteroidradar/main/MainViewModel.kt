@@ -1,14 +1,16 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
-import com.udacity.asteroidradar.database.AsteroidApiFilter
 import com.udacity.asteroidradar.database.asDomainModel
 import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.repository.AsteroidsRepository
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
+
+enum class AsteroidApiFilter() {
+    SHOW_WEEK, SHOW_TODAY, SHOW_ALL
+}
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val database = getDatabase(application)
@@ -42,13 +44,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             asteroidsRepository.loadAsteroids()
         }
     }
-
-    //    val st = Transformations.map(filter) {
-//        if (it == AsteroidApiFilter.SHOW_ALL) {
-//
-//        }
-//    }
-
 
     val pictureOfDay = asteroidsRepository.pictureOfDay
 

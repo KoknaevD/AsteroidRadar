@@ -6,9 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.R
-import com.udacity.asteroidradar.database.AsteroidApiFilter
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 
 
@@ -17,17 +15,22 @@ class MainFragment : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
         val activity = requireNotNull(this.activity)
-        ViewModelProvider(this, MainViewModel.Factory(activity.application)).get(MainViewModel::class.java)
+        ViewModelProvider(
+            this,
+            MainViewModel.Factory(activity.application)
+        ).get(MainViewModel::class.java)
     }
 
     private var viewModelAdapter: AsteroidsAdapter? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding = FragmentMainBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
-        viewModel.asteroids.observe(viewLifecycleOwner, Observer {asteroids ->
+        viewModel.asteroids.observe(viewLifecycleOwner, Observer { asteroids ->
             asteroids?.apply {
                 viewModelAdapter?.asteroids = asteroids
             }
